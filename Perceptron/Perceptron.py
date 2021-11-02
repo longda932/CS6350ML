@@ -1,23 +1,12 @@
 import os
-import numpy as np
 import torch
-import torch.nn as nn
-import math
-import torch.optim as optim
-from torch.nn import Module, Parameter
-import torch.distributions as dis
-import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
 import torch.utils.data as Data
-import datetime
-import random
 torch.manual_seed(4)
 
 
 def load_data(shuffle):
     dir=os.getcwd()
-    labelEncoder = LabelEncoder()
     file_loc1=dir+"/bank-note/train.csv"
     file_loc2=dir+"/bank-note/test.csv"
     rawdata1 = pd.read_csv(file_loc1,header=None)
