@@ -1,1 +1,1 @@
-Just hit run. Thanks!
+run run.sh. Thanks!
