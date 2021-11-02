@@ -210,7 +210,7 @@ print("Weight for standard perceptron with learning rate of 0.5:",weights)
 error=prediction_error(test_data,weights)
 print("Prediction error:",error)
 
-
+train_data,test_data,train_loader=load_data(False)
 c,dict,m=voted_perceptron(10,1,train_loader)
 # print(m)
 
