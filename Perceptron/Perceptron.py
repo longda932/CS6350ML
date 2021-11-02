@@ -11,7 +11,8 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import torch.utils.data as Data
 import datetime
-
+import random
+torch.manual_seed(4)
 
 
 def load_data(shuffle):
@@ -229,7 +230,12 @@ df.to_csv("counts",index=False)
 dict,m=averaged_perceptron(10,1,train_loader)
 error1=averaged_prediction_error(test_data,dict,m)
 # print(m)
-print(dict[:m+1,:])
+dict=dict[:1+m,:]
+
+dict_np = dict.numpy()
+df = pd.DataFrame(dict_np)
+df.to_csv("weights2",index=False)
+
 print(error1)
 
 
