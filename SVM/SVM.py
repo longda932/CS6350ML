@@ -133,7 +133,7 @@ def SGD_SVM(C,train_loader,n_examples,loader2,r0,a,type=1):
 
             if(type==1):
                 lr=get_r(r0,a,T+1)
-            # else:
+            else:
             #     print("HERE")
                 lr=r0/(1+T+1)
             if(batch_y*torch.mm(w.t(),batch_x.view(-1,1))<=1):
