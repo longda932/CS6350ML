@@ -133,7 +133,8 @@ def SGD_SVM(C,train_loader,n_examples,loader2,r0,a,type=1):
 
             if(type==1):
                 lr=get_r(r0,a,T+1)
-            else:
+            # else:
+            #     print("HERE")
                 lr=r0/(1+T+1)
             if(batch_y*torch.mm(w.t(),batch_x.view(-1,1))<=1):
                 
@@ -232,28 +233,52 @@ Cs=torch.tensor([100/873,500/873,700/873])
 
 
 
-w=SGD_SVM(Cs[0],loader,n_examples,loader2,0.02,0.0005,type=1)
+w=SGD_SVM(Cs[0],loader,n_examples,loader2,0.005,0.0005,type=1)
 print(w)
 
-k=prediction_error(data2,w)
-print(k)
 k=prediction_error(data1,w)
+print(k)
+k=prediction_error(data2,w)
 print(k)
 
 w=SGD_SVM(Cs[1],loader,n_examples,loader2,0.001,0.0005,type=1)
 print(w)
 
-k=prediction_error(data2,w)
-print(k)
 k=prediction_error(data1,w)
+print(k)
+k=prediction_error(data2,w)
 print(k)
 
 w=SGD_SVM(Cs[2],loader,n_examples,loader2,0.0003,0.0004,type=1)
 print(w)
 
+k=prediction_error(data1,w)
+print(k)
 k=prediction_error(data2,w)
 print(k)
+
+w=SGD_SVM(Cs[0],loader,n_examples,loader2,0.005,0.0005,type=0)
+print(w)
+
 k=prediction_error(data1,w)
+print(k)
+k=prediction_error(data2,w)
+print(k)
+
+w=SGD_SVM(Cs[1],loader,n_examples,loader2,0.001,0.0005,type=0)
+print(w)
+
+k=prediction_error(data1,w)
+print(k)
+k=prediction_error(data2,w)
+print(k)
+
+w=SGD_SVM(Cs[2],loader,n_examples,loader2,0.0005,0.0003,type=0)
+print(w)
+
+k=prediction_error(data1,w)
+print(k)
+k=prediction_error(data2,w)
 print(k)
 
 
@@ -382,7 +407,7 @@ def dual_SVM(data1,n_examples,C):
     for i in range(n_examples):
         bounds.append((0,C))
 
-    result=minimize(fun=helper_func,x0=0.1*np.ones(n_examples),args=(a1[:,:-1],a2),method='SLSQP',bounds=bounds,constraints=cons)
+    result=minimize(fun=helper_func,x0=0*np.ones(n_examples),args=(a1[:,:-1],a2),method='SLSQP',bounds=bounds,constraints=cons)
     a=result.x
     # print(result)
     # print(len(a))
@@ -390,7 +415,7 @@ def dual_SVM(data1,n_examples,C):
     # print(w)
     b=get_b(a,a1,a2,n_examples,w)
     w[-1]=b
-    # print(w)
+    print(w)
     w=w.reshape(5,1)
     print("The setting: C is ",C)
     print("The training error: is ",prediction_error(data1,torch.from_numpy(w).float()))
@@ -402,9 +427,9 @@ def dual_SVM(data1,n_examples,C):
 
 
 
-# dual_SVM(data1,n_examples,Cs[0])
-# dual_SVM(data1,n_examples,Cs[1])
-# dual_SVM(data1,n_examples,Cs[2])
+dual_SVM(data1,n_examples,Cs[0])
+dual_SVM(data1,n_examples,Cs[1])
+dual_SVM(data1,n_examples,Cs[2])
 
 
 
@@ -422,10 +447,10 @@ def kernel_SVM(data1,n_examples,C,k):
         bounds.append((0,C))
 
 
-    atemp=cal_X(data1[:,:-1],data1[:,:-1],k)
+    atemp=cal_X(data1[:,:-2],data1[:,:-2],k)
 
-    big_x1=cal_X(data1[:,:-1],data1[:,:-1],k)
-    big_x2=cal_X(data1[:,:-1],data2[:,:-1],k)
+    big_x1=cal_X(data1[:,:-2],data1[:,:-2],k)
+    big_x2=cal_X(data1[:,:-2],data2[:,:-2],k)
 
 
     result=minimize(fun=helper_func2,x0=0.1*np.ones(n_examples),args=(atemp,a2),method='SLSQP',bounds=bounds,constraints=cons)
@@ -439,30 +464,112 @@ def kernel_SVM(data1,n_examples,C,k):
     return a
 
 
-# ks=[0.1,0.5,1,5,100]
-# vs=np.zeros((15,n_examples))
-# z=0
-# for j in range(3):
-#     for i in range(5):
-#         print("Setting: C is ",Cs[j],", and r is ",ks[i])
-#         vs[z,:]=kernel_SVM(data1,n_examples,Cs[j],ks[i])
-#         z=z+1
-# tempdir=dir+"/supVectors.txt"
-# np.savetxt(tempdir,vs)
+ks=[0.1,0.5,1,5,100]
+vs=np.zeros((15,n_examples))
+z=0
+for j in range(3):
+    for i in range(5):
+        print("Setting: C is ",Cs[j],", and r is ",ks[i])
+        vs[z,:]=kernel_SVM(data1,n_examples,Cs[j],ks[i])
+        z=z+1
+tempdir=dir+"/supVectors.txt"
+np.savetxt(tempdir,vs)
 
-# indexs=[5,6,7,8,9]
+indexs=[5,6,7,8,9]
 
-# vs=np.ones((15,n_examples))
 
-# for i in range(4):
-#     row1=vs[indexs[i],:]
-#     row2=vs[indexs[i+1],:]
-#     n=0
-#     for j in range(n_examples):
-#         if(row1[j]!=0 and row2[j]!=0):
-#             n=n+1
+
+for i in range(4):
+    row1=vs[indexs[i],:]
+    row2=vs[indexs[i+1],:]
+    n=0
+    for j in range(n_examples):
+        if(row1[j]!=0 and row2[j]!=0):
+            n=n+1
     
-#     print("The number of overlapped support vectors between ",ks[i]," and ",ks[i+1]," is: ",n)
+    print("The number of overlapped support vectors between ",ks[i]," and ",ks[i+1]," is: ",n)
+
+
+
+train_loader = Data.DataLoader(
+    dataset=data1,      
+    batch_size=1,     
+    shuffle=False,             
+    num_workers=0,             
+)
+
+
+def pre_p(n,Y,C,big_x,b,set):
+   
+
+
+    Y=(data1[:,-1].view(-1,1)).numpy()
+    n_examples=big_x.shape[1]
+    right=0
+    wrong=0
+    for i in range(n_examples):
+
+        
+
+        t1=((np.multiply(np.multiply(C,Y),big_x[:,i].reshape(n,1))).sum()+b)
+      
+        if(t1>0 and set[i,-1]==1.0):
+            right=right+1
+        elif(t1<=0 and set[i,-1]==-1.0):
+            right=right+1
+        else:
+            wrong=wrong+1
+    return (wrong/(right+wrong))
+def kernelP(n_examples,train_loader,k,data1,data2):
+    T=1000
+    C=np.ones((n_examples,1))
+    atemp=cal_X(data1[:,:-2],data1[:,:-2],k)
+
+    big_x1=cal_X(data1[:,:-2],data1[:,:-2],k)
+    big_x2=cal_X(data1[:,:-2],data2[:,:-2],k)
+
+
+    X=data1[:,:-2]
+    # print(data1.shape)
+    Y=(data1[:,-1].view(-1,1)).numpy()
+    for i in range(T):
+        p=0
+        for step,(data) in enumerate(train_loader):
+            
+            # batch_x=data[:,:-2]
+            batch_y=(data[:,-1]).numpy()
+
+
+            tb=(np.multiply(C,Y)).sum()
+            # print(tb.shape)
+            # print(np.multiply(np.multiply(C,Y),big_x1[:,p].reshape(n_examples,1)).shape)
+            t1=Y[p,0]*((np.multiply(np.multiply(C,Y),big_x1[:,p].reshape(n_examples,1))).sum()+tb)
+
+            if(t1<=0):
+                C[p,0]=C[p,0]+1
+            
+
+            p=p+1
+
+    
+    tb=(np.multiply(C,Y)).sum()
+    print("The setting r is ",k)
+    print("The training error is : ",pre_p(n_examples,data1[:,-1].view(-1,1),C,big_x1,tb,data1))
+    print("The test error is : ",pre_p(n_examples,data1[:,-1].view(-1,1),C,big_x2,tb,data2))
+    
+  
+
+kernelP(data1.shape[0],train_loader,0.1,data1,data2)
+kernelP(data1.shape[0],train_loader,0.5,data1,data2)
+kernelP(data1.shape[0],train_loader,1,data1,data2)
+kernelP(data1.shape[0],train_loader,5,data1,data2)
+kernelP(data1.shape[0],train_loader,100,data1,data2)
+
+            
+
+            
+
+
 
 
 

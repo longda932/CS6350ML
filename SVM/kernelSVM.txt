@@ -1,0 +1,64 @@
+Setting: C is  tensor(0.1145) , and r is  0.1
+The number of support vectors in this setting is:  872
+Training error:  0.0
+Testing error:  0.442
+Setting: C is  tensor(0.1145) , and r is  0.5
+The number of support vectors in this setting is:  872
+Training error:  0.0
+Testing error:  0.104
+Setting: C is  tensor(0.1145) , and r is  1
+The number of support vectors in this setting is:  802
+Training error:  0.0
+Testing error:  0.0
+Setting: C is  tensor(0.1145) , and r is  5
+The number of support vectors in this setting is:  731
+Training error:  0.009174311926605505
+Testing error:  0.006
+Setting: C is  tensor(0.1145) , and r is  100
+The number of support vectors in this setting is:  823
+Training error:  0.05045871559633028
+Testing error:  0.05
+Setting: C is  tensor(0.5727) , and r is  0.1
+The number of support vectors in this setting is:  872
+Training error:  0.0
+Testing error:  0.4
+Setting: C is  tensor(0.5727) , and r is  0.5
+The number of support vectors in this setting is:  863
+Training error:  0.0
+Testing error:  0.004
+Setting: C is  tensor(0.5727) , and r is  1
+The number of support vectors in this setting is:  759
+Training error:  0.0
+Testing error:  0.0
+Setting: C is  tensor(0.5727) , and r is  5
+The number of support vectors in this setting is:  537
+Training error:  0.0
+Testing error:  0.0
+Setting: C is  tensor(0.5727) , and r is  100
+The number of support vectors in this setting is:  779
+Training error:  0.016055045871559634
+Testing error:  0.014
+Setting: C is  tensor(0.8018) , and r is  0.1
+The number of support vectors in this setting is:  872
+Training error:  0.0
+Testing error:  0.38
+Setting: C is  tensor(0.8018) , and r is  0.5
+The number of support vectors in this setting is:  868
+Training error:  0.0
+Testing error:  0.004
+Setting: C is  tensor(0.8018) , and r is  1
+The number of support vectors in this setting is:  766
+Training error:  0.0
+Testing error:  0.0
+Setting: C is  tensor(0.8018) , and r is  5
+The number of support vectors in this setting is:  545
+Training error:  0.0
+Testing error:  0.0
+Setting: C is  tensor(0.8018) , and r is  100
+The number of support vectors in this setting is:  865
+Training error:  0.013761467889908258
+Testing error:  0.008
+The number of overlapped support vectors between  0.1  and  0.5  is:  863
+The number of overlapped support vectors between  0.5  and  1  is:  756
+The number of overlapped support vectors between  1  and  5  is:  480
+The number of overlapped support vectors between  5  and  100  is:  480
