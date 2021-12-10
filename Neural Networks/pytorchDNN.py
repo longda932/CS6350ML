@@ -1,33 +1,12 @@
 import torch
 import torch.nn as nn
-import math
-import torch.optim as optim
-from torch.nn import Module, Parameter
-import pandas as pd
-import numpy as np
-import sys
-import torch
-import numpy as np
-
-import numpy as np
-import torch.nn as nn
-import torch.nn.functional as F
-import math
-import random
-import torch.optim as optim
-import matplotlib.pyplot as plt
-
-import torch
-import torch.nn as nn
-import math
-import torch.optim as optim
-from torch.nn import Module, Parameter
-import pandas as pd
 import torch.utils.data as Data
-import sys
 import numpy as np
+import os
+import torch.optim as optim
 
 
+dir=os.getcwd()
 class DNN(nn.Module):
     def __init__(self,depth,width):
         super().__init__()
@@ -37,6 +16,24 @@ class DNN(nn.Module):
         for i in range(depth-2):
             self.moduleList.append(nn.Linear(width, width,bias=True))
             self.moduleList.append(nn.Tanh()) 
+        self.moduleList.append(nn.Linear(width, 1,bias=True))
+        
+    def forward(self,input):
+        for m in self.moduleList:
+            
+            input=m(input)
+
+        return input
+    
+class DNN2(nn.Module):
+    def __init__(self,depth,width):
+        super().__init__()
+        self.moduleList=nn.ModuleList()
+        self.moduleList.append(nn.Linear(4, width,bias=True))
+        self.moduleList.append(nn.ReLU())
+        for i in range(depth-2):
+            self.moduleList.append(nn.Linear(width, width,bias=True))
+            self.moduleList.append(nn.ReLU()) 
         self.moduleList.append(nn.Linear(width, 1,bias=True))
         
     def forward(self,input):
@@ -84,8 +81,8 @@ def load_data3(file1=None,file2=None):
     
     return train_loader,train_loader2,test_loader
 
-file1="/home/zenus/Da/Neural Networks/bank-note/train.csv"
-file2="/home/zenus/Da/Neural Networks/bank-note/test.csv"
+file1=dir+"/bank-note/train.csv"
+file2=dir+"/bank-note/test.csv"
 train_loader,train_loader2,test_loader=load_data3(file1,file2)
 
 def cal_error(test_loader,model):
@@ -98,7 +95,7 @@ def cal_error(test_loader,model):
         w=0
         break
    
-        
+    # print(batch_y.shape)
     for i in range(batch_y.shape[0]):
         if(out[i]<=0.5 and batch_y[i]==0):
             r=r+1
@@ -118,10 +115,11 @@ def initialize_weights_he(model):
             torch.nn.init.kaiming_uniform_(m.weight.data)
 
 def training(depth,width,epoch,init):
-    model=DNN(depth,width)
     if(init==0):
+        model=DNN(depth,width)
         initialize_weights_xavier(model)
     else:
+        model=DNN2(depth,width)
         initialize_weights_he(model)
         
     optimizer=optim.Adam(model.parameters(),lr=0.001)
@@ -146,9 +144,9 @@ def training(depth,width,epoch,init):
         inits="xavier"
     else:
         inits="he"
-    print("The setting is: depth is: ",depth," width is: ",width," init: ",inits)
-    print("Training error: ",cal_error(train_loader2,model))
-    print("Test error: ",cal_error(test_loader,model))
+    print("The setting is: depth is: ",depth," width is: ",width," init: ",inits," Training error: ",cal_error(train_loader2,model)," Test error: ",cal_error(test_loader,model))
+    # print("Training error: ",cal_error(train_loader2,model))
+    # print("Test error: ",cal_error(test_loader,model))
     
     
 depths=[3,5,9]
@@ -157,7 +155,10 @@ widths=[5,10,25,50,100]
 for i in range(3):
     for j in range(5):
         for k in range(2):
-            training(depths[i],widths[j],50,k)
+            if(j==4):
+                training(depths[i],widths[j],200,k)
+            else:
+                training(depths[i],widths[j],70,k)
     
             
 

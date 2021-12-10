@@ -1,14 +1,10 @@
 import torch
 import torch.nn as nn
-import math
-import torch.optim as optim
-from torch.nn import Module, Parameter
-import pandas as pd
-import numpy as np
-import sys
-import torch
 import numpy as np
 import torch.utils.data as Data
+import os
+
+dir=os.getcwd()
 
 def load_data3(file1=None,file2=None):
     fileName1=file1
@@ -117,10 +113,10 @@ def cal_error(test_loader,W):
 #         else:
 #             w=w+1
 #     return w/(r+w)
-file1="/home/zenus/Da/Neural Networks/bank-note/train.csv"
-file2="/home/zenus/Da/Neural Networks/bank-note/test.csv"
+file1=dir+"/bank-note/train.csv"
+file2=dir+"/bank-note/test.csv"
 train_loader,train_loader2,test_loader=load_data3(file1,file2)
-epoch=100
+epoch=200
 def training(var,a,b):
     W=torch.zeros(5,1)
     t=1
@@ -148,16 +144,16 @@ def training(var,a,b):
             
         
         # print("W",W)
-        print("LOSS: ",loss)
+        # print("LOSS: ",loss)
         t=t+1
-    print("MAP Setting: ","var: ",var)
-    print("Training error: ",cal_error(train_loader2,W))
-    print("Test error: ",cal_error(test_loader,W))
+    print("MAP Setting: ","var: ",var," Training error: ",cal_error(train_loader2,W)," Test error: ",cal_error(test_loader,W))
+    # print("Training error: ",cal_error(train_loader2,W))
+    # print("Test error: ",cal_error(test_loader,W))
 
 var=[0.01,0.1,0.5,1,3,5,10,100]
-for i in range(1):
+for i in range(8):
     
-    training(20,0.01,0.1)
+    training(var[i],0.01,0.1)
     
 def training2(a,b):
     W=torch.zeros(5,1)
@@ -174,22 +170,22 @@ def training2(a,b):
             
             
             
-            out=forward(W,batch_x)
+            # out=forward(W,batch_x)
             
-            dW=cal_grad2(batch_x,batch_y,W,batch_y)
+            dW=cal_grad2(batch_x,batch_y,W)
             # print(dW)
             W=W-lr*dW
             
-            out=forward(W,batch_x)
+            # out=forward(W,batch_x)
             
-            loss=loss+out
+            # loss=loss+out
             
         
         # print("W",W)
-        print("LOSS: ",loss)
+        # print("LOSS: ",loss)
         t=t+1
     print("MLE Setting: ")
     print("Training error: ",cal_error(train_loader2,W))
     print("Test error: ",cal_error(test_loader,W))
     
-# training2(0.01,0.1)
+training2(0.01,0.1)
