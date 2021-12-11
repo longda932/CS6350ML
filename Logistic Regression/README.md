@@ -1,1 +1,1 @@
-Just run run.sh.
+Just run run.sh
